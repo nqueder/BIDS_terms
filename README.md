@@ -3,7 +3,9 @@
 
 ## Project Description 
 
+![alt text](https://github.com/nqueder/BIDS_terms/blob/master/img/attachment_107445089.png)         
 
+![alt text](https://github.com/nqueder/BIDS_terms/blob/master/img/Picture1.png)
 
 
 In this project we aim to create a user friendly python tool for creating and exporting BIDS specification terms in PDF form tables for incorporation into the BIDS specification documents. This project is a part of the effort of the [NIDM-Terms project](https://scicrunch.org/nidm-terms/about/project) allowing the the BIDS working group to select amongst our curated [BIDS terms](https://github.com/NIDM-Terms/terms/tree/master/terms/BIDS_Terms) , search our information resource “[Interlex](https://scicrunch.org/nidm-terms)” for existing BIDS terms, or add a new BIDS term, which will continuously result in term dictionary in JSON-LD form added to our family of [BIDS Specification terms](https://github.com/NIDM-Terms/terms/tree/master/terms/BIDS_Terms). The user will be able to select which [properties](https://github.com/nqueder/terms/tree/patch-2/terms) he/she would like to include in the table (e.g. description, label, comment, etc..). The user will then have a PDF table of the chosen/added terms and their properties as an output. Such an effort will provide the BIDS working group with a user-friendly tool to build tables for the BIDS documentation while ensuring they have not re-purposed an existing BIDS specification term giving it conflicting definitions.  
