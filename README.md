@@ -4,12 +4,12 @@
 ## Project Description 
 
 <p align="center">
-  <img width="460" height="300" src="https://github.com/nqueder/BIDS_terms/blob/master/img/attachment_107445089.png">
+  <img width="760" height="300" src="https://github.com/nqueder/BIDS_terms/blob/master/img/attachment_107445089.png">
 </p>
 
 
 <p align="center">
-  <img width="460" height="300" src="https://github.com/nqueder/BIDS_terms/blob/master/img/Picture1.png">
+  <img width="300" height="300" src="https://github.com/nqueder/BIDS_terms/blob/master/img/Picture1.png">
 </p>
 
 
