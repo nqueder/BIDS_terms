@@ -3,10 +3,12 @@
 
 ## Project Description 
 
-<div align=”center”>![alt text](https://github.com/nqueder/BIDS_terms/blob/master/img/attachment_107445089.png)</div>      
+<div align=”center”>[![alt text](https://github.com/nqueder/BIDS_terms/blob/master/img/attachment_107445089.png)]</div>      
 
 
-<div align=”center”>![alt text](https://github.com/nqueder/BIDS_terms/blob/master/img/Picture1.png)</div>
+<div align=”center”>[![alt text](https://github.com/nqueder/BIDS_terms/blob/master/img/Picture1.png)]</div>
+
+
 
 
 
