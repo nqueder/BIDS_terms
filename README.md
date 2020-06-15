@@ -4,7 +4,7 @@
 ## Project Description 
 
 <p align="center">
-  <img width="760" height="300" src="https://github.com/nqueder/bids_terms_to_pdf_table/blob/master/img/BIDS-TERMS.png">
+  <img width="300" height="300" src="https://github.com/nqueder/bids_terms_to_pdf_table/blob/master/img/BIDS-TERMS.png">
 </p>
 
 
