@@ -4,13 +4,9 @@
 ## Project Description 
 
 <p align="center">
-  <img width="760" height="300" src="https://github.com/nqueder/BIDS_terms/blob/master/img/attachment_107445089.png">
+  <img width="760" height="300" src="https://github.com/nqueder/bids_terms_to_pdf_table/blob/master/img/BIDS-TERMS.png">
 </p>
 
-
-<p align="center">
-  <img width="300" height="300" src="https://github.com/nqueder/BIDS_terms/blob/master/img/Picture1.png">
-</p>
 
 
 
@@ -29,6 +25,14 @@ In this project we aim to create a user friendly python tool for creating and ex
 * Create JSON-LD file for new [terms](https://github.com/NIDM-Terms/terms/tree/master/terms/BIDS_Terms).
 * Create an automated way to push newly created JSON-LD files to the Interlex information resource (see: https://scicrunch.org/nidm-terms).
 
+
+### Interlex API Key:
+
+To be able to search and query BIDS terms in Interlex, an Interlex account and an API key are required. Here’s how you can obtain one:
+* Create a [Scicrunch](https://scicrunch.org/nidm-terms) account if don’t have one already
+* Once your account is all set, go to MY ACCOUNT in the top right corner and click on API Keys
+* Enter your password
+* Click on “Generate an API key” and under key you will have your new API key!
 
 
 
