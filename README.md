@@ -30,6 +30,12 @@ In this project we aim to create a user friendly python tool for creating and ex
   <img width="724" height="412" src="https://github.com/nqueder/bids_terms_to_pdf_table/blob/master/img/SampleTable.png">
 </p>
 
+#### Story board:
+
+<p align="center">
+  <img width="724" height="412" src="https://github.com/nqueder/bids_terms_to_pdf_table/blob/master/img/StoryBoard.pdf">
+</p>
+
 
 ### Interlex API Key:
 
