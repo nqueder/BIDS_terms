@@ -32,10 +32,7 @@ In this project we aim to create a user friendly python tool for creating and ex
 
 #### Story board:
 
-<p align="center">
-  <img width="724" height="412" src="https://github.com/nqueder/bids_terms_to_pdf_table/blob/master/img/StoryBoard.pdf">
-</p>
-
+![](img/StoryBoard.png)
 
 ### Interlex API Key:
 
