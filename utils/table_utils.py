@@ -91,8 +91,7 @@ def generate_pdf(term_dictionary,selected_properties,selected_terms,file_name):
     def header(canvas, c):
         canvas.saveState()
 
-    c = BaseDocTemplate(file_name)
-    c.setPageSize(landscape(letter))
+    c = BaseDocTemplate(file_name,landscape(letter))
     frame = Frame(c.leftMargin, c.bottomMargin, c.width, c.height - 2 * mm, id='normal')
     template = PageTemplate(id='term_table', frames=frame, onPage=header)
     c.addPageTemplates([template])
