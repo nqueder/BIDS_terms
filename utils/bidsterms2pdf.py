@@ -14,6 +14,15 @@ from add_term import add_term
 from table_utils import generate_pdf
 
 
+def select_term(terms_dict):
+
+
+    for keys, values in terms_dict.items():
+        print('')
+
+
+
+
 def load_available_properties(terms_dict):
     '''
     Takes union of all properties available for current BIDS terms
@@ -71,6 +80,7 @@ def main(agrv):
     #Loop through the terms in bids_terms_ takeout the ".jsonld" extention
     for t in bids_terms_:
         path_to_term = os.path.join(path_to_jld, t)
+        t = t[:-7]
         with open (path_to_term) as p:
             term_dict = json.load(p)
 
@@ -92,7 +102,8 @@ def main(agrv):
             print("Please select a valid option (1-4)")
             continue
 
-        #if num == 1:
+        if num == 1:
+            select_term(terms_dict)
 
         #if num == 2:
 
