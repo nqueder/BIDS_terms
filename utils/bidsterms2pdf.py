@@ -14,7 +14,7 @@ from add_term import add_term
 from table_utils import generate_pdf
 
 
-def search_term(terms_dict):
+def search_term(terms_dict, bids_terms):
 
     term_searched = input('Please enter full or partial BIDS term: ')
 
@@ -37,6 +37,7 @@ def search_term(terms_dict):
 
 
         if term_searched.isupper():
+
             if term_searched in key:
                 print('%d. %s %s %s'% (num_selector,key,':',terms_dict[key]['description']))
                 num_selector = num_selector + 1
@@ -56,7 +57,6 @@ def search_term(terms_dict):
         print('')
         print('NO MATCHING BIDS TERMS HAVE BEEN FOUND...')
         return
-
 
 
 
@@ -119,6 +119,12 @@ def main(agrv):
     path_to_jld = os.path.join(args.in_dir,'BIDS_Terms')
     path_to_out = args.out_dir
 
+    #read dictionary that defines our properties
+    path_to_prop_def = os.path.join(args.in_dir,'utils/property_def.json')
+    with open (path_to_prop_def) as f:
+        prop_def = json.load(f)
+
+
     #List all existing BIDS terms JSON-LD files
     bids_terms_ = os.listdir(path_to_jld)
 
@@ -152,7 +158,7 @@ def main(agrv):
         print('2. Search terms')
         print('3. Add new term')
         print("4. Create PDF table of selected terms (%s)" % selected_terms)
-        print("5. Exit")
+        print('5. Exit')
         print('---------------------------------------------------------------')
         print('')
 
@@ -167,18 +173,18 @@ def main(agrv):
             sel_temp = select_term(terms_dict,bids_terms)
             if sel_temp in selected_terms:
                 print('')
-                print('This term has already been added to your list, please select another term...')
+                print('This term has already been added to your list, please select a different term...')
             elif not sel_temp in selected_terms:
                 selected_terms.append(sel_temp)
 
         if num == 2:
-            sear_temp = search_term(terms_dict)
+            sear_temp = search_term(terms_dict,bids_terms)
             if sear_temp is None:
                 continue
             else:
                 if sear_temp in selected_terms:
                     print('')
-                    print('This term has already been added to your list, please select another term...')
+                    print('This term has already been added to your list, please select a different term...')
                 elif not sear_temp in selected_terms:
                     selected_terms.append(sear_temp)
 
@@ -210,7 +216,7 @@ def main(agrv):
                 print("Properties selected: %s" %selected_properties)
 
                 for property in property_list:
-                    print("%d. %s" %(num_selectors, property))
+                    print("%d. %s %s %s" %(num_selectors, property,':',prop_def[property]))
                     num_selectors = num_selectors + 1
 
                 print("%d. Done Selecting, Create PDF!" % num_selectors)
@@ -242,3 +248,4 @@ def main(agrv):
 
 if __name__ == "__main__":
    main(sys.argv[1:])
+
