@@ -92,7 +92,7 @@ def load_available_properties(terms_dict):
     for label,property_dict in terms_dict.items():
         # then loop through properties and add property if not already added
         for property, value in property_dict.items():
-            if property not in property_list:
+            if (property not in property_list) and (property != "@type") and (property != "@context"):
                 # if property isn't in our list add it
                 property_list.append(property)
 
@@ -185,7 +185,7 @@ def main(agrv):
         # adding a new BIDS term
         if num == 3:
             # create new BIDS term and save to new dictionary
-            new_term = add_term(bids_terms)
+            new_term = add_term(terms_dict)
 
             # add new_term dictionary to existing bids_terms dictionary
 
@@ -204,30 +204,33 @@ def main(agrv):
         # adding properties for table creation
         if num == 4:
             num_selectors = 1
-            property_list = load_available_properties(bids_terms)
+            property_list = load_available_properties(terms_dict)
             while True:
                 print("Please select which properties to include in the the PDF table:")
+                print("Properties selected: %s" %selected_properties)
 
                 for property in property_list:
                     print("%d. %s" %(num_selectors, property))
                     num_selectors = num_selectors + 1
 
-                print("%d. Done" % num_selectors)
+                print("%d. Done Selecting, Create PDF!" % num_selectors)
                 #Allow the user to input a number that correspond to their choice
-                property = int(input('Please choose from the following options:'))
+                property = int(input('Please choose from the following options: '))
 
-                if (property<1) or (property > (len(property_list))):
+                if (property<1) or (property > (len(property_list))+1):
                     continue
                 # if they selected the "Done" selection then exit this loop
                 elif property == num_selectors:
                     break
                 # if they selected a property add it to the selected properties list for PDF table
                 else:
-                    selected_properties.append(property_list[property])
+                    selected_properties.append(property_list[property-1])
+                    num_selectors = 1
 
 
             # create PDF table and exist loop
-            # generate_pdf(term_dictionary,selected_properties,file_name)
+            generate_pdf(term_dictionary=terms_dict,selected_properties=selected_properties,selected_terms=selected_terms,
+                         file_name=join(args.out_dir,"test.pdf"))
 
             # break
 
