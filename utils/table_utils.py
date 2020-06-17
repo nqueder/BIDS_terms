@@ -74,7 +74,7 @@ def call_stylesheet():
     )
     return styles
 
-def generate_pdf(term_dictionary,file_name):
+def generate_pdf(term_dictionary,selected_properties,file_name):
 
     def header(canvas, c):
         canvas.saveState()
