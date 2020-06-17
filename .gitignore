@@ -12,8 +12,7 @@ htmlcov/*
 /dist
 nidm.egg-info/
 
-.idea/
-.DS_Store
+.idea/*
+**/.DS_Store
 .project
 .settings
-.idea
