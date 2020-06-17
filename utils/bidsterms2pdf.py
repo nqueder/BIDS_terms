@@ -64,12 +64,18 @@ def main(agrv):
     selected_properties = []
     # term properties available
     available_properties = []
+    # dict of all terms
+    terms_dict = {}
 
 
     #Loop through the terms in bids_terms_ takeout the ".jsonld" extention
     for t in bids_terms_:
-        t = t[:-7]
-        bids_terms.append(t)
+        path_to_term = os.path.join(path_to_jld, t)
+        with open (path_to_term) as p:
+            term_dict = json.load(p)
+
+        terms_dict[t] = term_dict
+
 
     while True:
         # print options for the user to select from
