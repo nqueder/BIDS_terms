@@ -41,3 +41,15 @@ def add_term(bids_terms):
 # temporary to test function
 if __name__ == "__main__":
     add_term(bids_terms)
+
+
+
+
+
+
+
+
+
+
+
+
