@@ -91,7 +91,7 @@ def generate_pdf(term_dictionary,selected_properties,selected_terms,file_name):
     def header(canvas, c):
         canvas.saveState()
 
-    c = BaseDocTemplate(file_name,landscape(letter))
+    c = BaseDocTemplate(file_name,pagesize=landscape(letter))
     frame = Frame(c.leftMargin, c.bottomMargin, c.width, c.height - 2 * mm, id='normal')
     template = PageTemplate(id='term_table', frames=frame, onPage=header)
     c.addPageTemplates([template])
@@ -107,11 +107,14 @@ def generate_pdf(term_dictionary,selected_properties,selected_terms,file_name):
     header = []
     cell = ['BIDS Terms']
     # header.append(cell)
-    numberOfColumns = len(selected_properties) + 1
+    colWidth = ()
+    numberOfColumns = len(selected_properties)
     for i in range(1,numberOfColumns):
         cell.append([''])
+        # colWidth = colWidth + (len(selected_properties[i]))
     header.append(cell)
-    t = Table(header, colWidths=numberOfColumns*[(7.5/numberOfColumns)*inch],
+
+    t = Table(header, colWidths=numberOfColumns * [(7.5 / numberOfColumns) * inch],
               style=[('BOX', (0,0), (-1,-1), 0.25, colors.black),
                      ('SPAN', (0,0), (-1, 0)),
                      ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
@@ -126,15 +129,47 @@ def generate_pdf(term_dictionary,selected_properties,selected_terms,file_name):
         if i%2==0:
             table_style.append(('BACKGROUND',(0,i), (-1,i), '#D6EAF8'))
 
-    t = Table(data, repeatRows=1, splitByRow=True,
-              colWidths=numberOfColumns * [(5.5 / numberOfColumns) * inch],
+    t = Table(data, repeatRows=1,
+              colWidths=numberOfColumns * [(12 / numberOfColumns) * inch],
               style=[('BOX', (0,0), (-1,-1), 0.25, colors.black),
                      ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
                      ('FONT', (0,0), (-1,0), 'Helvetica-Bold')
                      ])
+    # t.wrapOn(c,landscape(letter),landscape(letter))
     t.setStyle(table_style)
     story.append(t)
     # story.append(spacer)
 
 
     c.build(story)
+
+def export_markdown_table(term_dictionary,selected_properties,selected_terms,file_name):
+    '''
+    This function will create a markdown table of selected terms and properties.
+
+    :param term_dictionary:
+    :param selected_properties:
+    :param selected_terms:
+    :param file_name:
+    :return:
+    '''
+
+    with open(file_name,'wt') as fp:
+        table_hdr = "| "
+        table_hdr_separator = "| :"
+        sep = "-"
+        for property in selected_properties:
+            table_hdr = table_hdr + property + " | "
+            table_hdr_separator = table_hdr_separator + ''.join([char*len(property) for char in sep]) + \
+                " | :"
+
+        fp.write(table_hdr)
+        fp.write("\n")
+        fp.write(table_hdr_separator)
+        fp.write("\n")
+        for item in selected_terms:
+            for property in selected_properties:
+                row_data = "| " + term_dictionary[item][property]
+                fp.write(row_data)
+
+            fp.write("\n")

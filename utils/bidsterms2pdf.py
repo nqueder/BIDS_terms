@@ -11,7 +11,7 @@ from urllib.parse import urlparse
 import numpy as np
 
 from add_term import add_term
-from table_utils import generate_pdf
+from table_utils import generate_pdf,export_markdown_table
 
 
 def search_term(terms_dict, bids_terms):
@@ -218,11 +218,13 @@ def main(agrv):
                 print("Properties selected: %s" %selected_properties)
 
                 for property in property_list:
+                  
                     if property in prop_def.keys():
                         print("%d. %s : %s" %(num_selectors, property,prop_def[property]))
                     else:
                         print("%d. %s" %(num_selectors, property))
-                    num_selectors = num_selectors + 1
+
+                     num_selectors = num_selectors + 1
 
                 print("%d. Done Selecting, Create PDF!" % num_selectors)
                 #Allow the user to input a number that correspond to their choice
@@ -240,9 +242,13 @@ def main(agrv):
 
 
             # create PDF table and exist loop
-            generate_pdf(term_dictionary=terms_dict,selected_properties=selected_properties,selected_terms=selected_terms,
-                         file_name=join(args.out_dir,"test.pdf"))
+            export_markdown_table(term_dictionary=terms_dict,selected_properties=selected_properties,selected_terms=selected_terms,
+                         file_name=join(args.out_dir,"test.md"))
+            #generate_pdf(term_dictionary=terms_dict,selected_properties=selected_properties,selected_terms=selected_terms,
+            #             file_name=join(args.out_dir,"test.pdf"))
 
+            #generate_pdf_pdfkit(term_dictionary=terms_dict,selected_properties=selected_properties,selected_terms=selected_terms,
+            #             file_name=join(args.out_dir,"test.pdf"))
             # break
 
         # if the user wants to exit without creating a PDF table
