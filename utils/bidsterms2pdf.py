@@ -14,8 +14,53 @@ from add_term import add_term
 from table_utils import generate_pdf
 
 
-def select_term(terms_dict,bids_terms):
+def search_term(terms_dict):
 
+    term_searched = input('Please enter full or partial BIDS term: ')
+
+    searched_keys = []
+
+    num_selector = 1
+    for key, value in terms_dict.items():
+
+        if term_searched.islower():
+
+            if term_searched in key:
+                print('%d. %s %s %s'% (num_selector,key,':',terms_dict[key]['description']))
+                num_selector = num_selector + 1
+                searched_keys.append(key)
+
+            if term_searched.upper() in key:
+                print('%d. %s %s %s'% (num_selector,key,':',terms_dict[key]['description']))
+                num_selector = num_selector + 1
+                searched_keys.append(key)
+
+
+        if term_searched.isupper():
+            if term_searched in key:
+                print('%d. %s %s %s'% (num_selector,key,':',terms_dict[key]['description']))
+                num_selector = num_selector + 1
+                searched_keys.append(key)
+
+            if term_searched.lower() in key:
+                print('%d. %s %s %s'% (num_selector,key,':',terms_dict[key]['description']))
+                num_selector = num_selector + 1
+                searched_keys.append(key)
+
+
+
+    if len(searched_keys) > 0:
+        term_selected = searched_keys[(int(input('Please choose from the terms above: '))-1)]
+        return term_selected
+    else:
+        print('')
+        print('NO MATCHING BIDS TERMS HAVE BEEN FOUND...')
+        return
+
+
+
+
+def select_term(terms_dict,bids_terms):
 
     bids_terms = bids_terms.sort()
     keys_list = []
@@ -29,9 +74,10 @@ def select_term(terms_dict,bids_terms):
         #stor a temp list of keys, go to list entry 10 and see what 10 maps to
 
     print('')
-    term_slected = keys_list[(int(input('Please choose from the terms above: '))-1)]
+    term_selected = keys_list[(int(input('Please choose from the terms above: '))-1)]
 
-    return term_slected
+
+    return term_selected
 
 
 def load_available_properties(terms_dict):
@@ -118,9 +164,23 @@ def main(agrv):
             continue
 
         if num == 1:
-            selected_terms.append(select_term(terms_dict,bids_terms))
+            sel_temp = select_term(terms_dict,bids_terms)
+            if sel_temp in selected_terms:
+                print('')
+                print('This term has already been added to your list, please select another term...')
+            elif not sel_temp in selected_terms:
+                selected_terms.append(sel_temp)
 
-        #if num == 2:
+        if num == 2:
+            sear_temp = search_term(terms_dict)
+            if sear_temp is None:
+                continue
+            else:
+                if sear_temp in selected_terms:
+                    print('')
+                    print('This term has already been added to your list, please select another term...')
+                elif not sear_temp in selected_terms:
+                    selected_terms.append(sear_temp)
 
         # adding a new BIDS term
         if num == 3:
@@ -174,13 +234,7 @@ def main(agrv):
         # if the user wants to exit without creating a PDF table
         if num == 5:
             exit(0)
-    #Once the user is done then he/she will be allowed
-    #pdf = input('Would you like to generate a PDF table of the selected/added terms? [yes/no]:')
 
-
-    #if pdf == 'no':
-        #continue
-    #if pdf == 'yes':
 
 
 if __name__ == "__main__":
