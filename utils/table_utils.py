@@ -74,12 +74,24 @@ def call_stylesheet():
     )
     return styles
 
-def generate_pdf(term_dictionary,selected_properties,file_name):
+def generate_pdf(term_dictionary,selected_properties,selected_terms,file_name):
+
+
+    # create a list of lists for data to be added to PDF table
+    data = []
+    # append properties to first row of PDF table
+    data.append(selected_properties)
+    for item in selected_terms:
+        row = []
+        for property in selected_properties:
+            row.append(term_dictionary[item][property])
+        data.append(row)
+
 
     def header(canvas, c):
         canvas.saveState()
 
-    c = BaseDocTemplate(file_name, pagesize=letter)
+    c = BaseDocTemplate(file_name,landscape(letter))
     frame = Frame(c.leftMargin, c.bottomMargin, c.width, c.height - 2 * mm, id='normal')
     template = PageTemplate(id='term_table', frames=frame, onPage=header)
     c.addPageTemplates([template])
@@ -95,7 +107,7 @@ def generate_pdf(term_dictionary,selected_properties,file_name):
     header = []
     cell = ['BIDS Terms']
     # header.append(cell)
-    numberOfColumns = len(list(my_dict.keys())[0])
+    numberOfColumns = len(selected_properties) + 1
     for i in range(1,numberOfColumns):
         cell.append([''])
     header.append(cell)
@@ -109,12 +121,13 @@ def generate_pdf(term_dictionary,selected_properties,file_name):
     story.append(t)
 
     table_style= []
+    # creates alternating colors in table rows
     for i, row in enumerate(data):
         if i%2==0:
             table_style.append(('BACKGROUND',(0,i), (-1,i), '#D6EAF8'))
 
-    t = Table(data, repeatRows=1,
-              colWidths=numberOfColumns * [(7.5 / numberOfColumns) * inch],
+    t = Table(data, repeatRows=1, splitByRow=True,
+              colWidths=numberOfColumns * [(5.5 / numberOfColumns) * inch],
               style=[('BOX', (0,0), (-1,-1), 0.25, colors.black),
                      ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
                      ('FONT', (0,0), (-1,0), 'Helvetica-Bold')
