@@ -79,12 +79,13 @@ def main(agrv):
 
     #Loop through the terms in bids_terms_ takeout the ".jsonld" extention
     for t in bids_terms_:
+        if t.startswith("."):
+            continue
         path_to_term = os.path.join(path_to_jld, t)
-        t = t[:-7]
         with open (path_to_term) as p:
             term_dict = json.load(p)
 
-        terms_dict[t] = term_dict
+        terms_dict[term_dict['label']] = term_dict
 
 
     while True:
@@ -110,7 +111,7 @@ def main(agrv):
         # adding a new BIDS term
         if num == 3:
             # create new BIDS term and save to new dictionary
-            new_term = add_term(bids_terms)
+            new_term = add_term(terms_dict)
 
             # add new_term dictionary to existing bids_terms dictionary
 
