@@ -14,13 +14,24 @@ from add_term import add_term
 from table_utils import generate_pdf
 
 
-def select_term(terms_dict):
+def select_term(terms_dict,bids_terms):
 
 
-    for keys, values in terms_dict.items():
+    bids_terms = bids_terms.sort()
+    keys_list = []
+
+    num_selector = 1
+    for key, value in terms_dict.items():
         print('')
+        print('%d. %s %s %s'% (num_selector,key,':',terms_dict[key]['description']))
+        num_selector = num_selector + 1
+        keys_list.append(key)
+        #stor a temp list of keys, go to list entry 10 and see what 10 maps to
 
+    print('')
+    term_slected = keys_list[(int(input('Please choose from the terms above: '))-1)]
 
+    return term_slected
 
 
 def load_available_properties(terms_dict):
@@ -79,31 +90,35 @@ def main(agrv):
 
     #Loop through the terms in bids_terms_ takeout the ".jsonld" extention
     for t in bids_terms_:
+        if t.startswith("."):
+            continue
         path_to_term = os.path.join(path_to_jld, t)
-        t = t[:-7]
         with open (path_to_term) as p:
             term_dict = json.load(p)
-
-        terms_dict[t] = term_dict
+        terms_dict[term_dict['label']] = term_dict
 
 
     while True:
         # print options for the user to select from
+        print('')
+        print('---------------------------------------------------------------')
         print('1. Select a term')
         print('2. Search terms')
         print('3. Add new term')
         print("4. Create PDF table of selected terms (%s)" % selected_terms)
         print("5. Exit")
+        print('---------------------------------------------------------------')
+        print('')
 
         #Allow the user to input a number that correspond to their choice
-        num = int(input('Please choose from the following options:'))
+        num = int(input('Please choose from the options above: '))
 
         if (num < 1) or (num > 5):
             print("Please select a valid option (1-4)")
             continue
 
         if num == 1:
-            select_term(terms_dict)
+            selected_terms.append(select_term(terms_dict,bids_terms))
 
         #if num == 2:
 
