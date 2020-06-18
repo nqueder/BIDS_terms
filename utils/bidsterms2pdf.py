@@ -20,33 +20,56 @@ def search_term(terms_dict, bids_terms):
 
     searched_keys = []
 
+    # dictionary that will hold terms in lower case as keys and original terms as values
+    temp_dict = {}
+
     num_selector = 1
+
     for key, value in terms_dict.items():
 
-        if term_searched.islower():
 
-            if term_searched in key:
-                print('%d. %s : %s'% (num_selector,key,terms_dict[key]['description']))
+
+        temp_dict[key] = key
+
+        #covert all of the keys in temp dict to lower case to search terms
+        term_lower = {k.lower(): v for k, v in temp_dict.items()}
+
+        #convert the input term or searched term to all lower case
+        term_searched = term_searched.lower()
+
+        for low_term, original_term in term_lower.items():
+
+            if term_searched in low_term:
+                print('%d. %s : %s'% (num_selector,original_term,terms_dict[original_term]['description']))
                 num_selector = num_selector + 1
                 searched_keys.append(key)
 
-            if term_searched.upper() in key:
-                print('%d. %s : %s'% (num_selector,key,terms_dict[key]['description']))
-                num_selector = num_selector + 1
-                searched_keys.append(key)
 
 
-        if term_searched.isupper():
+        #if term_searched.islower():
 
-            if term_searched in key:
-                print('%d. %s : %s'% (num_selector,key,terms_dict[key]['description']))
-                num_selector = num_selector + 1
-                searched_keys.append(key)
+            #if term_searched in key:
+                #print('%d. %s : %s'% (num_selector,key,terms_dict[key]['description']))
+                #num_selector = num_selector + 1
+                #searched_keys.append(key)
 
-            if term_searched.lower() in key:
-                print('%d. %s : %s'% (num_selector,key,terms_dict[key]['description']))
-                num_selector = num_selector + 1
-                searched_keys.append(key)
+            #if term_searched.upper() in key:
+                #print('%d. %s : %s'% (num_selector,key,terms_dict[key]['description']))
+                #num_selector = num_selector + 1
+                #searched_keys.append(key)
+
+
+        #if term_searched.isupper():
+
+            #if term_searched in key:
+                #print('%d. %s : %s'% (num_selector,key,terms_dict[key]['description']))
+                #num_selector = num_selector + 1
+                #searched_keys.append(key)
+
+            #if term_searched.lower() in key:
+                #print('%d. %s : %s'% (num_selector,key,terms_dict[key]['description']))
+                #num_selector = num_selector + 1
+                #searched_keys.append(key)
 
 
 
@@ -224,7 +247,7 @@ def main(agrv):
                     else:
                         print("%d. %s" %(num_selectors, property))
 
-                     num_selectors = num_selectors + 1
+                    num_selectors = num_selectors + 1
 
                 print("%d. Done Selecting, Create PDF!" % num_selectors)
                 #Allow the user to input a number that correspond to their choice
