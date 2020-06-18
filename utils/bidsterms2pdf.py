@@ -12,6 +12,13 @@ import numpy as np
 
 from add_term import add_term
 from table_utils import generate_pdf,export_markdown_table
+from nidm.experiment.Utils import authenticate_github
+from github import Github, GithubException
+
+
+# Placeholder for GitHub source repo to fork and add new terms to
+GITHUB_SOURCE_REPO = "https://github.com/nqueder/bids_terms_to_pdf_table"
+
 
 
 def search_term(terms_dict, bids_terms):
@@ -103,13 +110,18 @@ def load_available_properties(terms_dict):
 def main(agrv):
 
     parser = ArgumentParser(description='This tool will allow the user to search across existing BIDS terms allowing for '
-                                        'creation of PDF table for the BIDS specification documents. The tool will also'
+                                        'creation of a Markdown table for the BIDS specification documents. The tool will also'
                                         'allow the user to add new BIDS terms, which will result in JSON-LD files added to '
                                         '"bids_terms_to_pdf_table" Github repository')
 
     parser.add_argument('-in', dest='in_dir', required=True, help='Path to cloned "bids_terms_to_pdf_table" Github repository')
-    parser.add_argument('-out', dest= 'out_dir', required=False, help='Path to output directory: only required if you would like'
+    parser.add_argument('-out', dest= 'out_dir', required=True, help='Path to output directory: only required if you would like'
                                                                       ' to export a PDF table of BIDS specification terms')
+    parser.add_argument('-github',dest='github',required=False,help='Optional username,password or username,token for your'
+                                                                    'GitHub account.  If not defined then software will ask on'
+                                                                    'command line if you create a new BIDS term. The source repo'
+                                                                    'will be forked into your user space and generate a new pull'
+                                                                    'request for the new term to be added to the BIDS terminology.' )
 
 
     args = parser.parse_args()
@@ -194,10 +206,18 @@ def main(agrv):
         if num == 3:
             # create new BIDS term and save to new dictionary
             new_term = add_term(terms_dict)
+            print("New BIDS term created.  Adding to BIDS terms dictionary and generating a GitHub pull request...")
 
             # add new_term dictionary to existing bids_terms dictionary
+            terms_dict.update(new_term)
 
             # git fork of main BIDS terms repo into user's github space
+            if args.github:
+                git_auth = authenticate_github(credentials=args.github)
+            else:
+                git_auth = authenticate_github()
+
+            # fork source repo if not already in user's GitHub space
 
             # write new term to JSON-LD file to user's forked github space
 

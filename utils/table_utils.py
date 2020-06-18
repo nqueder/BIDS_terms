@@ -147,11 +147,10 @@ def export_markdown_table(term_dictionary,selected_properties,selected_terms,fil
     '''
     This function will create a markdown table of selected terms and properties.
 
-    :param term_dictionary:
-    :param selected_properties:
-    :param selected_terms:
-    :param file_name:
-    :return:
+    :param term_dictionary: dictionary of all BIDS terms
+    :param selected_properties: list of selected properties to include in the table
+    :param selected_terms: list of selected BIDS term labels (keys into term_dictionary) to include in the table
+    :param file_name: output filename with path
     '''
 
     with open(file_name,'wt') as fp:
