@@ -160,7 +160,7 @@ def main(agrv):
     parser.add_argument('-in', dest='in_dir', required=True, help='Path to cloned "bids_terms_to_pdf_table" Github repository')
     parser.add_argument('-out', dest= 'out_dir', required=True, help='Path to output directory: only required if you would like'
                                                                       ' to export a PDF table of BIDS specification terms')
-    parser.add_argument('-github',dest='github',required=False,help='Optional username,password or username,token for your'
+    parser.add_argument('-github',dest='github',required=False,help='WIP: Optional username,password or username,token for your'
                                                                     'GitHub account.  If not defined then software will ask on'
                                                                     'command line if you create a new BIDS term. The source repo'
                                                                     'will be forked into your user space and generate a new pull'
