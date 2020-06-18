@@ -78,6 +78,8 @@ def search_term(terms_dict):
         input_number = int(input('Please choose from the terms above: '))-1
         if not (input_number < 0) and (input_number > (len(searched_keys)-1)):
             print('')
+            print('---------------------------------------------------------------')
+            print('')
             print('Please select a valid entry...')
         else:
             term_selected = searched_keys[input_number]
