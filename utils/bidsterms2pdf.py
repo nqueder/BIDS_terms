@@ -32,6 +32,7 @@ def search_term(terms_dict, bids_terms):
 
     term_searched = input('Please enter full or partial BIDS term: ')
 
+
     searched_keys = []
 
     # dictionary that will hold terms in lower case as keys and original terms as values
@@ -39,51 +40,27 @@ def search_term(terms_dict, bids_terms):
 
     num_selector = 1
 
-    for key, value in terms_dict.items():
 
 
-
-        temp_dict[key] = key
-
-        #covert all of the keys in temp dict to lower case to search terms
-        term_lower = {k.lower(): v for k, v in temp_dict.items()}
-
-        #convert the input term or searched term to all lower case
-        term_searched = term_searched.lower()
-
-        for low_term, original_term in term_lower.items():
-
-            if term_searched in low_term:
-                print('%d. %s : %s'% (num_selector,original_term,terms_dict[original_term]['description']))
-                num_selector = num_selector + 1
-                searched_keys.append(key)
+    #convert the input term or searched term to all lower case
+    lower_searched = term_searched.lower()
 
 
-
-        #if term_searched.islower():
-
-            #if term_searched in key:
-                #print('%d. %s : %s'% (num_selector,key,terms_dict[key]['description']))
-                #num_selector = num_selector + 1
-                #searched_keys.append(key)
-
-            #if term_searched.upper() in key:
-                #print('%d. %s : %s'% (num_selector,key,terms_dict[key]['description']))
-                #num_selector = num_selector + 1
-                #searched_keys.append(key)
+    for lower_key in terms_dict.keys():
+        temp_dict[lower_key] = lower_key
 
 
-        #if term_searched.isupper():
+    #covert all of the keys in temp dict to lower case to search terms
+    term_lower = {k.lower(): v for k, v in temp_dict.items()}
 
-            #if term_searched in key:
-                #print('%d. %s : %s'% (num_selector,key,terms_dict[key]['description']))
-                #num_selector = num_selector + 1
-                #searched_keys.append(key)
 
-            #if term_searched.lower() in key:
-                #print('%d. %s : %s'% (num_selector,key,terms_dict[key]['description']))
-                #num_selector = num_selector + 1
-                #searched_keys.append(key)
+    for key, value in term_lower.items():
+
+
+        if lower_searched in key:
+            print('%d. %s : %s'% (num_selector,term_lower[key],terms_dict[term_lower[key]]['description']))
+            num_selector = num_selector + 1
+            searched_keys.append(key)
 
 
 
@@ -99,7 +76,10 @@ def search_term(terms_dict, bids_terms):
 
 def select_term(terms_dict,bids_terms):
 
-    bids_terms = bids_terms.sort()
+    #sort items in alphabetical order so its easier for the user to choose terms
+    #bids_terms = bids_terms.sort()
+
+
     keys_list = []
 
     num_selector = 1
@@ -152,6 +132,7 @@ def main(agrv):
                                                                     'command line if you create a new BIDS term. The source repo'
                                                                     'will be forked into your user space and generate a new pull'
                                                                     'request for the new term to be added to the BIDS terminology.' )
+
 
 
     args = parser.parse_args()
