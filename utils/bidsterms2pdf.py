@@ -241,7 +241,7 @@ def main(agrv):
                 print("Won't be able to write your new term to JSON-LD....")
                 print("Will write it as JSON to output directory for now to save the work")
                 with open(join(args.out_dir,str((new_term.key())[0]) + ".json"),'w') as fp:
-                    json.dump(new_term,fp)
+                    json.dump(new_term,fp,indent=4)
                 continue
 
             # write the new term JSON-LD file to the output directory
@@ -262,7 +262,7 @@ def main(agrv):
             doc[context['@context']['associatedWith']] = [str('NIDM'),str('BIDS')]
 
             # create compacted jsonld
-            compacted = jsonld.compact(doc,context)
+            compacted = jsonld.compact(doc,CONTEXT)
 
             # try to fork the GITHUB_SOURCE_REPO into the user's github space and
             # commit the new JSON-LD file and do a pull request
@@ -296,7 +296,7 @@ def main(agrv):
 
                 # write jsonld file to output directory....
                 with open(join(args.out_dir,list(new_term.keys())[0] + ".jsonld"),'w') as fp:
-                    json.dump(compacted,fp)
+                    json.dump(compacted,fp,indent=4)
 
 
 
