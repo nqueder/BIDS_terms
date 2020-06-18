@@ -50,4 +50,14 @@ To be able to search and query BIDS terms in Interlex, an Interlex account and a
 * For additional information on the background for this project see BIDS specification issue 423 (https://github.com/bids-standard/bids-specification/issues/423)
 
 
+# Install
+
+* conda create -n pynidm_py3 python=3
+* source activate pynidm_py3
+* cd bids_term_to_pdf_table
+* python setup.py install
+
+# Running the script
+
+* bids_term_to_table -in [PATH TO bids_term_to_pdf_table cloned repo] -out [OUTPUT DIRECTORY]
 
