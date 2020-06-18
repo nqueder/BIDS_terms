@@ -12,6 +12,7 @@ from urllib.parse import urlparse
 import numpy as np
 import tempfile
 
+
 from add_term import add_term
 from table_utils import generate_pdf,export_markdown_table
 try:
@@ -21,7 +22,9 @@ except ImportError:
     system('python -m pip install --upgrade pip pynidm')
     from nidm.experiment.Utils import authenticate_github
 
+
 from github import Github, GithubException
+
 
 
 # Placeholder for GitHub source repo to fork and add new terms to
@@ -31,9 +34,13 @@ GITHUB_SOURCE_REPO = "https://github.com/nqueder/bids_terms_to_pdf_table"
 CONTEXT = "https://raw.githubusercontent.com/NIDM-Terms/terms/master/context/cde_context.jsonld"
 
 
-def search_term(terms_dict, bids_terms):
+def search_term(terms_dict):
 
+    print('')
     term_searched = input('Please enter full or partial BIDS term: ')
+    print('')
+    print('Searching for BIDS terms')
+    print('')
 
 
     searched_keys = []
@@ -42,7 +49,6 @@ def search_term(terms_dict, bids_terms):
     temp_dict = {}
 
     num_selector = 1
-
 
 
     #convert the input term or searched term to all lower case
@@ -63,13 +69,20 @@ def search_term(terms_dict, bids_terms):
         if lower_searched in key:
             print('%d. %s : %s'% (num_selector,term_lower[key],terms_dict[term_lower[key]]['description']))
             num_selector = num_selector + 1
-            searched_keys.append(key)
+            searched_keys.append(term_lower[key])
 
 
-
+    # ask the user for entry and ensure that they're selecting a valid number
     if len(searched_keys) > 0:
-        term_selected = searched_keys[(int(input('Please choose from the terms above: '))-1)]
-        return term_selected
+        print('')
+        input_number = int(input('Please choose from the terms above: '))-1
+        if not (input_number < 0) and (input_number > (len(searched_keys)-1)):
+            print('')
+            print('Please select a valid entry...')
+        else:
+            term_selected = searched_keys[input_number]
+            return term_selected
+
     else:
         print('')
         print('NO MATCHING BIDS TERMS HAVE BEEN FOUND...')
@@ -82,6 +95,7 @@ def select_term(terms_dict,bids_terms):
     #sort items in alphabetical order so its easier for the user to choose terms
     #bids_terms = bids_terms.sort()
 
+    retry = 'retry'
 
     keys_list = []
 
@@ -94,10 +108,15 @@ def select_term(terms_dict,bids_terms):
         #stor a temp list of keys, go to list entry 10 and see what 10 maps to
 
     print('')
-    term_selected = keys_list[(int(input('Please choose from the terms above: '))-1)]
 
-
-    return term_selected
+    # ask the user for entry and ensure that they're selecting a valid number
+    input_number = int(input('Please choose from the terms above: '))-1
+    if not (input_number < 0) and (input_number > (len(keys_list)-1)):
+        print('')
+        return retry
+    else:
+        term_selected = keys_list[input_number]
+        return term_selected
 
 
 def load_available_properties(terms_dict):
@@ -199,14 +218,21 @@ def main(agrv):
 
         if num == 1:
             sel_temp = select_term(terms_dict,bids_terms)
+            if sel_temp == 'retry':
+                print('---------------------------------------------------------------')
+                print('')
+                print('Please select a valid entry...')
+                print('')
+                print('---------------------------------------------------------------')
+                sel_temp = select_term(terms_dict,bids_terms)
             if sel_temp in selected_terms:
                 print('')
                 print('This term has already been added to your list, please select a different term...')
-            elif not sel_temp in selected_terms:
+            elif not sel_temp in selected_terms and sel_temp != 'retry':
                 selected_terms.append(sel_temp)
 
         if num == 2:
-            sear_temp = search_term(terms_dict,bids_terms)
+            sear_temp = search_term(terms_dict)
             if sear_temp is None:
                 continue
             else:
