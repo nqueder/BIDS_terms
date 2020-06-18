@@ -5,16 +5,14 @@ import pandas as pd
 from pyld import jsonld
 from os.path import join
 import json
-import shutil
 import tempfile
 import urllib.request as ur
 from urllib.parse import urlparse
-import numpy as np
-import tempfile
 
 
-from add_term import add_term
-from table_utils import generate_pdf,export_markdown_table
+
+from .add_term import add_term
+from .table_utils import generate_pdf,export_markdown_table
 try:
     from nidm.experiment.Utils import authenticate_github
 except ImportError:
