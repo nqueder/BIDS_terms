@@ -1,4 +1,5 @@
 import os,sys
+from os import system
 from argparse import ArgumentParser
 import pandas as pd
 from pyld import jsonld
@@ -12,7 +13,13 @@ import numpy as np
 
 from add_term import add_term
 from table_utils import generate_pdf,export_markdown_table
-from nidm.experiment.Utils import authenticate_github
+try:
+    from nidm.experiment.Utils import authenticate_github
+except ImportError:
+    print("trying to install required module: PyNIDM")
+    system('python -m pip install --upgrade pip pynidm')
+    from nidm.experiment.Utils import authenticate_github
+
 from github import Github, GithubException
 
 
@@ -213,11 +220,17 @@ def main(agrv):
 
             # git fork of main BIDS terms repo into user's github space
             if args.github:
-                git_auth = authenticate_github(credentials=args.github)
+                git_auth,github_obj = authenticate_github(credentials=args.github)
             else:
-                git_auth = authenticate_github()
+                git_auth,github_obj = authenticate_github()
 
             # fork source repo if not already in user's GitHub space
+            # get github user
+            github_user = github_obj.get_user()
+            # create fork
+            user_fork = github_user.create_fork(GITHUB_SOURCE_REPO)
+
+
 
             # write new term to JSON-LD file to user's forked github space
 
@@ -244,7 +257,7 @@ def main(agrv):
                     else:
                         print("%d. %s" %(num_selectors, property))
 
-                     num_selectors = num_selectors + 1
+                    num_selectors = num_selectors + 1
 
                 print("%d. Done Selecting, Create PDF!" % num_selectors)
                 #Allow the user to input a number that correspond to their choice
