@@ -33,12 +33,12 @@ def search_term(terms_dict, bids_terms):
         if term_searched.islower():
 
             if term_searched in key:
-                print('%d. %s %s %s'% (num_selector,key,':',terms_dict[key]['description']))
+                print('%d. %s : %s'% (num_selector,key,terms_dict[key]['description']))
                 num_selector = num_selector + 1
                 searched_keys.append(key)
 
             if term_searched.upper() in key:
-                print('%d. %s %s %s'% (num_selector,key,':',terms_dict[key]['description']))
+                print('%d. %s : %s'% (num_selector,key,terms_dict[key]['description']))
                 num_selector = num_selector + 1
                 searched_keys.append(key)
 
@@ -46,12 +46,12 @@ def search_term(terms_dict, bids_terms):
         if term_searched.isupper():
 
             if term_searched in key:
-                print('%d. %s %s %s'% (num_selector,key,':',terms_dict[key]['description']))
+                print('%d. %s : %s'% (num_selector,key,terms_dict[key]['description']))
                 num_selector = num_selector + 1
                 searched_keys.append(key)
 
             if term_searched.lower() in key:
-                print('%d. %s %s %s'% (num_selector,key,':',terms_dict[key]['description']))
+                print('%d. %s : %s'% (num_selector,key,terms_dict[key]['description']))
                 num_selector = num_selector + 1
                 searched_keys.append(key)
 
@@ -75,7 +75,7 @@ def select_term(terms_dict,bids_terms):
     num_selector = 1
     for key, value in terms_dict.items():
         print('')
-        print('%d. %s %s %s'% (num_selector,key,':',terms_dict[key]['description']))
+        print('%d. %s : %s'% (num_selector,key,terms_dict[key]['description']))
         num_selector = num_selector + 1
         keys_list.append(key)
         #stor a temp list of keys, go to list entry 10 and see what 10 maps to
@@ -106,6 +106,7 @@ def load_available_properties(terms_dict):
     return property_list
 
 
+
 def main(agrv):
 
     parser = ArgumentParser(description='This tool will allow the user to search across existing BIDS terms allowing for '
@@ -121,6 +122,7 @@ def main(agrv):
                                                                     'command line if you create a new BIDS term. The source repo'
                                                                     'will be forked into your user space and generate a new pull'
                                                                     'request for the new term to be added to the BIDS terminology.' )
+
 
     args = parser.parse_args()
 
@@ -236,9 +238,13 @@ def main(agrv):
                 print("Properties selected: %s" %selected_properties)
 
                 for property in property_list:
-                   # print("%d. %s : %s" %(num_selectors, property,prop_def[property]))
-                    print("%d. %s" %(num_selectors, property))
-                    num_selectors = num_selectors + 1
+                  
+                    if property in prop_def.keys():
+                        print("%d. %s : %s" %(num_selectors, property,prop_def[property]))
+                    else:
+                        print("%d. %s" %(num_selectors, property))
+
+                     num_selectors = num_selectors + 1
 
                 print("%d. Done Selecting, Create PDF!" % num_selectors)
                 #Allow the user to input a number that correspond to their choice
