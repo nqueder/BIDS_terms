@@ -10,6 +10,7 @@ import tempfile
 import urllib.request as ur
 from urllib.parse import urlparse
 import numpy as np
+import tempfile
 
 from add_term import add_term
 from table_utils import generate_pdf,export_markdown_table
@@ -26,6 +27,8 @@ from github import Github, GithubException
 # Placeholder for GitHub source repo to fork and add new terms to
 GITHUB_SOURCE_REPO = "https://github.com/nqueder/bids_terms_to_pdf_table"
 
+# WIP: Placeholder for JSON-LD context file
+CONTEXT = "https://raw.githubusercontent.com/NIDM-Terms/terms/master/context/cde_context.jsonld"
 
 
 def search_term(terms_dict, bids_terms):
@@ -241,27 +244,82 @@ def main(agrv):
             # add new_term dictionary to existing bids_terms dictionary
             terms_dict.update(new_term)
 
-            # git fork of main BIDS terms repo into user's github space
-            if args.github:
-                git_auth,github_obj = authenticate_github(credentials=args.github)
-            else:
-                git_auth,github_obj = authenticate_github()
-
-            # fork source repo if not already in user's GitHub space
-            # get github user
-            github_user = github_obj.get_user()
-            # create fork
-            user_fork = github_user.create_fork(GITHUB_SOURCE_REPO)
 
 
+            # try and open context file for JSON-LD
+            #try to open the url and get the pointed to file
+            try:
+                #open url and get file
+                opener = ur.urlopen(CONTEXT)
+                # write temporary file to disk and use for stats
+                temp = tempfile.NamedTemporaryFile(delete=False)
+                temp.write(opener.read())
+                temp.close()
+                context_file = temp.name
+                # read in jsonld context
+                with open(context_file) as context_data:
+                    context = json.load(context_data)
+            except:
+                print("ERROR! Can't open url: %s" %CONTEXT)
+                print("Won't be able to write your new term to JSON-LD....")
+                print("Will write it as JSON to output directory for now to save the work")
+                with open(join(args.out_dir,str((new_term.key())[0]) + ".json"),'w') as fp:
+                    json.dump(new_term,fp,indent=4)
+                continue
 
-            # write new term to JSON-LD file to user's forked github space
+            # write the new term JSON-LD file to the output directory
+            # open a new dictionary
+            doc = {}
 
-                # do a git commit
+            #add type as schema.org/DataElement
+            doc['@type'] = context['@context']['DataElement']
 
-                # do a git push
+            # copy over new_term dictionary items given the context file mappings between dictionary
+            # keys and urls
+            for key,subdict in new_term.items():
+                for property,value in subdict.items():
+                    doc[context['@context'][property]] = value
 
-            # issue a pull request to main BIDS terms repo
+            # create the association
+            # add property to specify that the term is associated with NIDM
+            doc[context['@context']['associatedWith']] = [str('NIDM'),str('BIDS')]
+
+            # create compacted jsonld
+            compacted = jsonld.compact(doc,CONTEXT)
+
+            # try to fork the GITHUB_SOURCE_REPO into the user's github space and
+            # commit the new JSON-LD file and do a pull request
+            try:
+                # git fork of main BIDS terms repo into user's github space
+                if args.github:
+                    git_auth,github_obj = authenticate_github(credentials=args.github)
+                else:
+                    git_auth,github_obj = authenticate_github(credentials=[])
+
+                # fork source repo if not already in user's GitHub space
+                # get github user
+                github_user = github_obj.get_user()
+                # create fork
+                user_fork = github_user.create_fork(GITHUB_SOURCE_REPO)
+
+                #user_fork.create_file("test.txt", "test", "test", branch="test")
+                # write new term to JSON-LD file to user's forked github space
+
+                    # do a git commit
+
+                    # do a git push
+
+                # issue a pull request to main BIDS terms repo
+            except:
+                e = sys.exc_info()[0]
+                print("Error adding your new term to forked GitHub repository.")
+                print("Writing JSON-LD file (%s) to the output directory."
+                      %join(args.out_dir,list(new_term.keys())[0] + ".jsonld"))
+                print("You'll need to submit this new term to the GitHub repo yourself!")
+
+                # write jsonld file to output directory....
+                with open(join(args.out_dir,list(new_term.keys())[0] + ".jsonld"),'w') as fp:
+                    json.dump(compacted,fp,indent=4)
 
 
 
