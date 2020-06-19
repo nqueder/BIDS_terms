@@ -206,7 +206,7 @@ def main(agrv):
         print('1. Select a term')
         print('2. Search terms')
         print('3. Add new term')
-        print("4. Create PDF table of selected terms (%s)" % selected_terms)
+        print("4. Create a table of selected terms (%s)" % selected_terms)
         print('5. Exit')
         print('---------------------------------------------------------------')
         print('')
