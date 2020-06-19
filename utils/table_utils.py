@@ -22,7 +22,8 @@ except ImportError:
     from reportlab.lib import colors
     from reportlab.lib.enums import TA_LEFT, TA_CENTER
 
-
+import pandas as pd
+import pdfkit
 
 def call_stylesheet():
     styles= {
@@ -172,3 +173,14 @@ def export_markdown_table(term_dictionary,selected_properties,selected_terms,fil
                 fp.write(row_data)
 
             fp.write("\n")
+
+def export_pdfkit_table(term_dictionary,selected_properties,selected_terms,file_name):
+    '''
+    This function will use pdfkit and go through an html intermediary to export a PDF formatted table
+    :param term_dictionary: dictionary of all BIDS terms
+    :param selected_properties: list of selected properties to include in the table
+    :param selected_terms: list of selected BIDS term labels (keys into term_dictionary) to include in the table
+    :param file_name: output filename with path
+    '''
+
+    # convert dictionary to data frame...

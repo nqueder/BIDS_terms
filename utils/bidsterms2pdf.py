@@ -5,16 +5,14 @@ import pandas as pd
 from pyld import jsonld
 from os.path import join
 import json
-import shutil
 import tempfile
 import urllib.request as ur
 from urllib.parse import urlparse
-import numpy as np
-import tempfile
 
 
-from add_term import add_term
-from table_utils import generate_pdf,export_markdown_table
+
+from .add_term import add_term
+from .table_utils import generate_pdf,export_markdown_table
 try:
     from nidm.experiment.Utils import authenticate_github
 except ImportError:
@@ -75,7 +73,13 @@ def search_term(terms_dict):
     # ask the user for entry and ensure that they're selecting a valid number
     if len(searched_keys) > 0:
         print('')
-        input_number = int(input('Please choose from the terms above: '))-1
+        input_number = input('Please choose from the terms above or return to go back to main menu: ')
+        if input_number == "":
+            print('No term selected, returning to main menu')
+            return
+        else:
+            input_number = int(input_number)-1
+
         if not (input_number < 0) and (input_number > (len(searched_keys)-1)):
             print('')
             print('---------------------------------------------------------------')
@@ -112,8 +116,13 @@ def select_term(terms_dict,bids_terms):
     print('')
 
     # ask the user for entry and ensure that they're selecting a valid number
-    input_number = int(input('Please choose from the terms above: '))-1
-    if not (input_number < 0) and (input_number > (len(keys_list)-1)):
+    input_number = input('Please choose from the terms above or return to go back to main menu: ')
+    if input_number == "":
+        print('No term selected, returning to main menu')
+        return
+    else:
+        input_number = int(input_number)-1
+    if not (input_number < 0) or (input_number > (len(keys_list)-1)):
         print('')
         return retry
     else:
@@ -151,7 +160,7 @@ def main(agrv):
     parser.add_argument('-in', dest='in_dir', required=True, help='Path to cloned "bids_terms_to_pdf_table" Github repository')
     parser.add_argument('-out', dest= 'out_dir', required=True, help='Path to output directory: only required if you would like'
                                                                       ' to export a PDF table of BIDS specification terms')
-    parser.add_argument('-github',dest='github',required=False,help='Optional username,password or username,token for your'
+    parser.add_argument('-github',dest='github',required=False,help='WIP: Optional username,password or username,token for your'
                                                                     'GitHub account.  If not defined then software will ask on'
                                                                     'command line if you create a new BIDS term. The source repo'
                                                                     'will be forked into your user space and generate a new pull'
@@ -161,8 +170,6 @@ def main(agrv):
 
     args = parser.parse_args()
 
-    #Present the user with instructions
-    print('instruction... (TO BE ADDED)')
 
     #Set paths to input and output directory
     path_to_jld = os.path.join(args.in_dir,'BIDS_Terms')
@@ -190,13 +197,25 @@ def main(agrv):
 
 
     #Loop through the terms in bids_terms_ takeout the ".jsonld" extention
+    file_count = 0
     for t in bids_terms_:
+        if file_count % 50 == 0:
+            done=str(int((float(file_count)/len(bids_terms_))*100))
+            print(" Loading existing BIDS terms: %s%%      %s"%(done,"\r"))
         if t.startswith("."):
             continue
         path_to_term = os.path.join(path_to_jld, t)
         with open (path_to_term) as p:
             term_dict = json.load(p)
         terms_dict[term_dict['label']] = term_dict
+        file_count = file_count + 1
+
+    #Present the user with instructions
+    print('\nUsing the table below, select terms to be added to a Markdown table')
+    print('Select an existing term and repeat until you have added all the terms you want in the table')
+    print('Once complete, select 4 to create the Markdown table')
+    print('If you want to add a new term, select option 3 and add the various term properties\n')
+
 
 
     while True:
@@ -206,7 +225,7 @@ def main(agrv):
         print('1. Select a term')
         print('2. Search terms')
         print('3. Add new term')
-        print("4. Create a table of selected terms (%s)" % selected_terms)
+        print("4. Create Markdown table of selected terms (%s)" % selected_terms)
         print('5. Exit')
         print('---------------------------------------------------------------')
         print('')
