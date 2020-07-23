@@ -11,8 +11,8 @@ from urllib.parse import urlparse
 
 
 
-from .add_term import add_term
-from .table_utils import generate_pdf,export_markdown_table
+#from .add_term import add_term
+#from .table_utils import generate_pdf,export_markdown_table
 try:
     from nidm.experiment.Utils import authenticate_github
 except ImportError:
@@ -118,11 +118,14 @@ def select_term(terms_dict,bids_terms):
     # ask the user for entry and ensure that they're selecting a valid number
     input_number = input('Please choose from the terms above or return to go back to main menu: ')
     if input_number == "":
-        print('No term selected, returning to main menu')
+        print('')
+        print('---------------------------------------------------------------')
+        print('')
+        print('No terms selected, returning to the main menu...')
         return
     else:
         input_number = int(input_number)-1
-    if not (input_number < 0) or (input_number > (len(keys_list)-1)):
+    if (input_number < 0) or (input_number > (len(keys_list)-1)):
         print('')
         return retry
     else:
@@ -356,7 +359,7 @@ def main(agrv):
             num_selectors = 1
             property_list = load_available_properties(terms_dict)
             while True:
-                print("Please select which properties to include in the the PDF table:")
+                print("Please select which properties to include in the the table:")
                 print("Properties selected: %s" %selected_properties)
 
                 for property in property_list:
@@ -368,7 +371,7 @@ def main(agrv):
 
                     num_selectors = num_selectors + 1
 
-                print("%d. Done Selecting, Create PDF!" % num_selectors)
+                print("%d. Done Selecting, Create Markdown!" % num_selectors)
                 #Allow the user to input a number that correspond to their choice
                 property = int(input('Please choose from the following options: '))
 
