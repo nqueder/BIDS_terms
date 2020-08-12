@@ -8,6 +8,8 @@ import json
 import tempfile
 import urllib.request as ur
 from urllib.parse import urlparse
+import getpass
+from github import Github
 
 
 
@@ -39,6 +41,8 @@ def search_term(terms_dict):
     print('')
     print('Searching for BIDS terms')
     print('')
+
+    terms_dict = dict( sorted(terms_dict.items(), key=lambda x: x[0].lower()) )
 
 
     searched_keys = []
@@ -104,6 +108,8 @@ def select_term(terms_dict,bids_terms):
     retry = 'retry'
 
     keys_list = []
+
+    terms_dict = dict( sorted(terms_dict.items(), key=lambda x: x[0].lower()) )
 
     num_selector = 1
     for key, value in terms_dict.items():
@@ -173,6 +179,22 @@ def main(agrv):
 
     args = parser.parse_args()
 
+    #Ask for user's github credentials
+    print("This tool is designed to use our existing BIDS specification terms and allow you to add new "
+          "BIDS terms to our list available in our Github repository. "
+          "Please note that your user name and password will only be used access our BIDS_Specification terms"
+          "and will not be saved after you exit the tool.")
+    print("")
+    print("Please enter your Github username and password...")
+    username = input("Github username: ")
+    password = getpass.getpass("Github password: ")
+
+
+    # Access github and pull BIDS_specification terms from main repo
+    #github = Github(username, password)
+    #user = github.get_user()
+
+    repository_name =  ""
 
     #Set paths to input and output directory
     path_to_jld = os.path.join(args.in_dir,'BIDS_Terms')
